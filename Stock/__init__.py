@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 # *Handling Images* #
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['UPLOADED_PHOTOS_DEST'] = os.pathsep.join(basedir, 'static/images')
+app.config['UPLOADED_PHOTOS_DEST'] = os.path.join(basedir, 'static/images')
 photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
 patch_request_class(app)
