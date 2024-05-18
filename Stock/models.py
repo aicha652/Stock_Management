@@ -1,6 +1,6 @@
 from Stock import db, login_manager
 from flask_login import UserMixin
-
+from .tools import hash_pass
 
 # Define the user loader function for flask-login
 @login_manager.user_loader
