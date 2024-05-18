@@ -1,0 +1,19 @@
+{% macro render_field(field, _class='', info='', mandatory=false) %}
+   <div class="form-group">
+        <label class="font-size-h6" for="{{ field.name }}">
+            {{ field.label.text }} {% if mandatory %}
+            <span class="text-danger">*</span>{% endif %}
+        </label>
+        {% if field.errors %}
+            {{ field(class='form-control form-control-solid form-control-lg is-invalid' + _class ,
+             autocomplete="off", **kwargs)|safe }}
+        {% else %}
+            {{ field(class='from-control form-control-solid form-control-lg' + _class ,
+             autocomplete="off", **kwargs)|safe }}
+        {% endif %}
+        {% for error in field.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+        <span class="form-text text-muted">{{ info }}</span>
+   </div>
+{% endmacro %}
