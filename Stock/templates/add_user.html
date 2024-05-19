@@ -88,4 +88,136 @@
             }
         </style>
     </head>
+
+    <body>
+        <section class="sidebar">
+          <a href="#" class="logo">
+            <i class="fa-solid fa-user"></i>
+            <span class="text">{{ current_user.username }}</span>
+          </a>
+    
+          <ul class="side-menu top">
+            <li>
+              <a href="{{ url_for('home') }}" class="nav-link">
+                <i class="fas fa-border-all"></i>
+                <span class="text">Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('addproduct') }}" class="nav-link">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="text">Add Product</span>
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('products') }}" class="nav-link">
+                <i class="fas fa-chart-simple"></i>
+                <span class="text">Products</span>
+              </a>
+            </li>
+        {% if current_user.is_admin %}    
+            <li class="active">
+              <a href="{{ url_for('addUser') }}" class="nav-link">
+                <i class="fa-solid fa-user-plus"></i>
+                <span class="text">Add User</span>
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('users') }}" class="nav-link">
+                <i class="fas fa-people-group"></i>
+                <span class="text">Users</span>
+              </a>
+            </li>
+        {% endif %}    
+          </ul>
+    
+          <ul class="side-menu">
+            <li>
+              <a href="{{ url_for('account') }}">
+                <i class="fa-regular fa-address-card"></i>
+                <span class="text">Profile</span>
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('logout') }}" class="logout">
+                <i class="fas fa-right-from-bracket"></i>
+                <span class="text">Logout</span>
+              </a>
+            </li>
+          </ul>
+        </section>
+    
+        <section class="content">
+          <nav>
+            <i class="fas fa-bars menu-btn"></i>
+          </nav>
+    
+      <main>
+        <div class="head-title">
+          <div class="left">
+            <ul class="breadcrumb">
+              <li>
+                <a href="#">Users</a>
+              </li>
+              <i class="fas fa-chevron-right"></i>
+              <li>
+                <a href="{{ url_for('addUser') }}" class="active">Add User</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+            
+        {% from "_render_fields.html" import render_field, render_field_select %}
+        <div class="d-flex flex-column-fluid">
+            <!--begin::Container-->
+            <div class=" container ">
+                <form class="form" method="POST" enctype="multipart/form-data" style="width: 70%">
+                    <div class="card card-custom" style="background-color: antiquewhite;">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-2"></div>
+                                <div class="col-xl-8">
+    
+                                    {{ form.csrf_token }}
+                                    {% if msg %}
+                                        <div class="alert alert-custom alert-danger fade show" role="alert">
+                                            <div class="alert-icon"><i class="flaticon-warning"></i></div>
+                                            <div class="alert-text">{{ msg }}</div>
+                                            <div class="alert-close">
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true"><i class="ki ki-close"></i></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+    
+                                    {{ render_field(form.username, class="form-control", mandatory=true) }}
+    
+                                    {{ render_field(form.email, class="form-control", placeholder="exemple@email.com", mandatory=true) }}
+                                    
+                                    {{ render_field(form.password, class="form-control", mandatory=true) }}
+                                    
+                                    {{ render_field(form.confirm, class="form-control", mandatory=true) }}
+    
+                                    {{ render_field(form.phone, class="form-control", mandatory=true) }}
+                                    <div class="card-toolbar">
+    
+                                        <button id="submit" type="submit" class="btn btn-light-warning font-weight-bolder">
+                                            <i class=" icon-lg la la-save"></i>
+                                            Add User
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-xl-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+      </main>
+    </section>
+    
+    <script src="static/js/home.js"></script>
+    </body>
 </html>
