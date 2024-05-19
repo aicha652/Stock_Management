@@ -1,7 +1,7 @@
 from flask import send_from_directory, render_template, url_for, flash, redirect, request, jsonify, abort, current_app, session
 from flask_login import login_user, current_user, logout_user, login_required
 from Stock import app, db, bcrypt, photos
-from Stock.models import User
+from Stock.models import User, Product
 from Stock.forms import LoginForm, UserForm
 import os, secrets, re
 from functools import wraps
@@ -54,6 +54,15 @@ def login():
         else:
             msg = "Login unsuccessful, please check your credentials"
     return render_template('login.html', msg=msg, form=form)
+
+
+# Home route accessible after login, shows basic stats
+@app.route('/home', strict_slashes=False)
+@login_required
+def home():
+    users = User.query.count()
+    products = Product.query.count()
+    return render_template('home.html', users=users, products=products)
 
 
 
