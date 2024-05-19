@@ -8,7 +8,18 @@ from functools import wraps
 
 
 
-
+# Custom decorator to restrict access to admin-only routes
+def admin_required(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        # Check if the current user is an admin
+        if not current_user.is_admin:
+            # Flash a message and redirect if not an admin
+            flash('You do not have permission to access this page.', 'danger')
+            return redirect(url_for('home'))
+        # Call the original function if the user is an admin
+        return func(*args, **kwargs)
+    return decorated_function
 
 
 
@@ -43,3 +54,55 @@ def login():
         else:
             msg = "Login unsuccessful, please check your credentials"
     return render_template('login.html', msg=msg, form=form)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Add user route, accessibl to admin, add new users to the database
+@app.route('/addUser', methods=["GET", "POST"])
+@login_required
+@admin_required
+def addUser():
+    msg = ""
+    form = UserForm()
+    if request.method == "POST":
+        username = form.username.data
+        email = form.email.data
+        password = bcrypt.generate_password_hash(form.password.data)
+        confirm = bcrypt.generate_password_hash(form.confirm.data)
+        phone = form.phone.data
+        #check if the username and email already exists
+        existing_user = User.query.filter_by(username=username).first()
+        existing_email = User.query.filter_by(email=email).first()
+
+        if existing_user:
+            msg = "Username already exists. Please choose a different username."
+        elif existing_email:
+            msg = "email already exists. Please choose a different email."
+        elif form.password.data != form.confirm.data:
+            msg = "Passwords must match."
+        elif not re.match(r"[^@]+@[^@]+\.[^@]+", form.email.data):
+            msg = "Invalid email address"
+        else:
+            user = User(username=username, email=email, password=password,
+            phone=phone)
+            db.session.add(user)
+            db.session.commit()
+            msg = "User has been added"
+            return redirect(url_for('users'))
+    return render_template('add_user.html', form=form, msg=msg)
