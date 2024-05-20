@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+        <!--font awesome-->
+        <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+
+        <!--css file-->
+        <link rel="stylesheet" href="static/css/home.css" />
+
+        <style>
+            /* Custom styles for the entire page */
+             .container {
+                 margin-left: 300px;
+                 padding: 20px;
+             }
+    
+             .card {
+                 border-radius: 10px;
+                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+             }
+    
+            .card-custom {
+                 border: 1px solid #ccc;
+                 border-radius: 5px;
+                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                 background-color: #fff;
+             }
+
+            .card-header {
+                background-color: #007bff;
+                color: #fff;
+                padding: 15px;
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+            }
+
+            .card-title h3 {
+                margin: 0;
+            }
+
+            .card-toolbar {
+                padding: 10px;
+            }
+
+            .btn {
+                background-color: #ffc107;
+                color: #333;
+                border: none;
+                padding: 8px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            .btn:hover {
+                background-color: #ffca2c;
+            }
+
+            .card-body {
+                padding: 20px;
+            }
+
+            .form-control {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #f7f3f3;
+                border-radius: 5px;
+                margin-bottom: 15px;
+                box-sizing: border-box;
+            }
+
+            .alert {
+                padding: 15px;
+                margin-bottom: 20px;
+                border: 1px solid transparent;
+                border-radius: 4px;
+            }
+
+            .alert-danger {
+                color: #721c24;
+                background-color: #f8d7da;
+                border-color: #f5c6cb;
+            }
+
+            .close {
+                float: right;
+                font-size: 20px;
+                font-weight: 700;
+                line-height: 1;
+                color: #000;
+                text-shadow: 0 1px 0 #fff;
+                opacity: .5;
+            }
+            .message-box {
+                background: #f8d7da;
+                color: #721c24;
+                padding: 10px;
+                border-radius: 5px;
+                text-align: center;
+                margin-bottom: 15px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <section class="sidebar">
+          <a href="#" class="logo">
+            <i class="fa-solid fa-user"></i>
+            <span class="text">{{ current_user.username }}</span>
+          </a>
+    
+          <ul class="side-menu top">
+            <li>
+              <a href="{{ url_for('home') }}" class="nav-link">
+                <i class="fas fa-border-all"></i>
+                <span class="text">Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('addproduct') }}" class="nav-link">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="text">Add Product</span>
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('products') }}" class="nav-link">
+                <i class="fas fa-chart-simple"></i>
+                <span class="text">Products</span>
+              </a>
+            </li>
+        {% if current_user.is_admin %}    
+            <li class="active">
+              <a href="{{ url_for('addUser') }}" class="nav-link">
+                <i class="fa-solid fa-user-plus"></i>
+                <span class="text">Add User</span>
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('users') }}" class="nav-link">
+                <i class="fas fa-people-group"></i>
+                <span class="text">Users</span>
+              </a>
+            </li>
+        {% endif %}    
+          </ul>
+    
+          <ul class="side-menu">
+            <li>
+              <a href="{{ url_for('account') }}">
+                <i class="fa-regular fa-address-card"></i>
+                <span class="text">Profile</span>
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('logout') }}" class="logout">
+                <i class="fas fa-right-from-bracket"></i>
+                <span class="text">Logout</span>
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <section class="content">
+            <nav>
+                <i class="fas fa-bars menu-btn"></i>
+            </nav>
+
+            <main>
+                <div class="head-title">
+                    <div class="left">
+                        <ul class="breadcrumb">
+                            <li>
+                                <a href="#">Profile</a>
+                            </li>
+                            <i class="fas fa-chevron-right"></i>
+                            <li>
+                                <a href="#"class="active">Update Profile'</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                {% if msg %}
+                                <div class="message-box">
+                                    {{ msg }}
+                    
+                    
+                                    </div>
+                                    {% endif %}
+                                    <h2 class="text-center">Profile Setting</h2>
+                                    </div>
+                                    <div class="card-body" style="background-color:antiquewhite;">
+                                        {% from "_render_fields.html" import render_field %}
+                                        <form method="POST" enctype="multipart/form-data" action="{{ url_for('updateaccount', id=current_user.id) }}">
+                                        <div class="form-group">
+                                            {{ render_field(form.username, class="form-control")}}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ render_field(form.email, class="form-control")}}
+                                        </div>
+                                        <div class="form-group">
+                                            {{ render_field(form.phone, class="form-control")}}
+                                        </div>
+                                        <br>
+                                        <div class="card-toolbar">
+                                            <button type="submit" class="btn btn-info">Update Profile</button>
+                                        </div>
+
+                                </form>
+                            </div>
+                            <!--end::Container-->
+                        </div>   
+                      </div>
+                    </main>
+                  </section>
+              
+                  <script src="static/js/home.js"></script>
+                </body>
+              </html>
+                
+                </div>
+            </main>
+        </section>
