@@ -144,3 +144,21 @@ def addproduct():
 def products():
     products = Product.query.all()
     return render_template('products.html', products=products)
+
+# Delete product route, delete a product from database
+@app.route('/deleteproduct/<int:id>', methods=["POST"])
+@login_required
+def deleteproduct(id):
+    product = Product.query.get_or_404(id)
+    if request.method == "POST":
+        if request.files.get('image_1'):
+            try:
+                os.unlink(os.path.join(current_app.root_path, 'static/images/' + product.image_1))
+            except Exception as e:
+                print(e)
+                db.session.delete(product)
+                db.session.commit()
+                flash(f'{product.name} Deleted', 'success')
+                return redirect(url_for('products'))
+            flash(f'Cant delete {product.name}', 'warning')
+            return redirect(url_for('products'))

@@ -163,8 +163,16 @@
                         <td> {{ product.quantity }}</td>
                         <td><img src="{{ url_for('static', filename='images/' + product.image_1) }}" width="100" alt="Image"></td>
                         <td>
-                            <a href="{{ url_for('')}}"></a>
+                            <a href="{{ url_for('updateproduct', id=product.id) }}" class="btn btn-outline-warning btn-sm btn-edit">
+                                <i class="fas fa-edit" style="font-size: 24px"></i>
+                            </a>
                         </td>
+                        <form id="delete-form-{{ product.id }}" action="{{ url_for('deleteproduct', id=product.id )}}" method="POST" onsubmit="return confirmDelelte()">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button type="submit" class="btn btn-danger btn-sm btn-delete">
+                                <i class="fas fa-trash-alt" style="font-size: 24px;"></i>
+                            </button>
+                        </form>
                     </tr>
                     {% endfor %}
                 </tbody>
