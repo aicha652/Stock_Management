@@ -5,10 +5,10 @@
             <span class="text-danger">*</span>{% endif %}
         </label>
         {% if field.errors %}
-            {{ field(class='form-control form-control-solid form-control-lg is-invalid' + _class ,
+            {{ field(class_='form-control form-control-solid form-control-lg is-invalid' + _class ,
              autocomplete="off", **kwargs)|safe }}
         {% else %}
-            {{ field(class='from-control form-control-solid form-control-lg' + _class ,
+            {{ field(class_='from-control form-control-solid form-control-lg' + _class ,
              autocomplete="off", **kwargs)|safe }}
         {% endif %}
         {% for error in field.errors %}
@@ -16,4 +16,45 @@
         {% endfor %}
         <span class="form-text text-muted">{{ info }}</span>
    </div>
+{% endmacro %}
+
+{% macro render_field_select(field, _class='', placeholder="", info='', required=False) %}
+    <div class="mb-10 form-group">
+        <label class="font-size-h6" for="{{ field.name }}">
+            {{ field.label.text }} {% if mandatory %}
+            <span class="text-danger">*</span>{% endif %}</label>
+        {% if field.errors %}
+            {% set _class = _class + " is-invalid" %}
+        {% endif %}
+
+        {% set attrs = {'class_':"form-control form-control-solid form-control-lg selectpicker", 'data-live-search': 'True', "title": placeholder } %}
+        {{ field(**attrs) | safe }}
+
+        {% for error in field.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+        <span class="form-text text-muted">{{ info }}</span>
+    </div>
+{% endmacro %}
+
+{% macro render_inline_field(field, _class='', info='', mandatory=false) %}
+    <div class="form-group row">
+        <label class="font-size-h6 col-xl-3 col-lg-3 col-form-label" for="{{ field.name }}">
+            {{ field.label.text }} {% if mandatory %}
+            <span class="text-danger">*</span>{% endif %}
+        </label>
+        <div class="col-lg-9 col-xl-6">
+            {% if field.errors %}
+                {{ field(class_='form-control form-control-solid form-control-lg is-invalid' + _class ,
+            autocomplete="off", **kwargs)|safe }}
+            {% else %}
+                {{ field(class_='form-control form-control-solid form-control-lg ' +_class ,
+                autocomplete="off", **kwargs)|safe }}
+            {% endif %}
+            {% for error in field.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+            {% endfor %}
+            <span class="form-text text-muted">{{ info }}</span>
+        </div>  
+    </div>
 {% endmacro %}
