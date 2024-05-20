@@ -2,7 +2,7 @@ from flask import send_from_directory, render_template, url_for, flash, redirect
 from flask_login import login_user, current_user, logout_user, login_required
 from Stock import app, db, bcrypt, photos
 from Stock.models import User, Product
-from Stock.forms import LoginForm, UserForm, AddProducts
+from Stock.forms import EditUserForm, LoginForm, UserForm, AddProducts
 import os, secrets, re
 from functools import wraps
 
@@ -192,3 +192,21 @@ def updateproduct(id):
     form.description.data = product.description
     form.quantity.data = product.quantity
     return render_template('edit_product.html', form=form, product=product, msg=msg)
+
+# Update account route, allows user to update their account details
+@app.route('/updateaccount/<int:id>', methods=["GET", "POST"])
+@login_required
+def updateaccount(id):
+    msg=""
+    user = User.query.get_or_404(id)
+    form = EditUserForm(request.form)
+    if request.method == "POST":
+        user.username = form.username.data
+        user.email = form.email.data
+        user.phone = form.phone.data
+        db.session.commit()
+        msg = "Profile Updated"
+    form.username.data = user.username
+    form.email.data = user.email
+    form.phone.data = user.phone
+    return render_template('account.html', form=form, user=user, msg=msg)
