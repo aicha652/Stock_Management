@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+        <!--font awesome-->
+        <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+
+        <!--css file-->
+        <link rel="stylesheet" href="static/css/home.css" />
+
+        <style>
+            .container {
+                margin-left: 200px;
+            }
+    
+            .card {
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            .card-custom {
+                border: 1px solid #ccc;
+                border-radius: 20px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                background-color: rgb(253, 253, 253);
+            }
+            
+            .card-toolbar {
+                margin-left: 200px;
+                padding: 10px;
+            }
+  
+            .btn-light-warning {
+                background-color: #4060c9;
+                color: #333;
+                border: none;
+                padding: 8px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+  
+            .btn-light-warning:hover {
+                background-color: #ffca2c;
+            }
+  
+            .card-body {
+                padding: 20px;
+            }
+            
+            
+            .form-control {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                margin-bottom: 15px;
+                box-sizing: border-box;
+            }
+  
+            .alert {
+                padding: 15px;
+                margin-bottom: 20px;
+                border: 1px solid transparent;
+                border-radius: 4px;
+            }
+  
+            .alert-danger {
+                color: #721c24;
+                background-color: #f8d7da;
+                border-color: #f5c6cb;
+            }
+  
+            .close {
+                float: right;
+                font-size: 20px;
+                font-weight: 700;
+                line-height: 1;
+                color: #000;
+                text-shadow: 0 1px 0 #fff;
+                opacity: .5;
+            }
+        </style>
+    </head>
+
+    <body>
+        <section class="sidebar">
+          <a href="#" class="logo">
+            <i class="fa-solid fa-user"></i>
+            <span class="text">{{ current_user.username }}</span>
+          </a>
+    
+          <ul class="side-menu top">
+            <li>
+              <a href="{{ url_for('home') }}" class="nav-link">
+                <i class="fas fa-border-all"></i>
+                <span class="text">Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('addproduct') }}" class="nav-link">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="text">Add Product</span>
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('products') }}" class="nav-link">
+                <i class="fas fa-chart-simple"></i>
+                <span class="text">Products</span>
+              </a>
+            </li>
+        {% if current_user.is_admin %}    
+            <li class="active">
+              <a href="{{ url_for('addUser') }}" class="nav-link">
+                <i class="fa-solid fa-user-plus"></i>
+                <span class="text">Add User</span>
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('users') }}" class="nav-link">
+                <i class="fas fa-people-group"></i>
+                <span class="text">Users</span>
+              </a>
+            </li>
+        {% endif %}    
+          </ul>
+    
+          <ul class="side-menu">
+            <li>
+              <a href="{{ url_for('account') }}">
+                <i class="fa-regular fa-address-card"></i>
+                <span class="text">Profile</span>
+              </a>
+            </li>
+            <li>
+              <a href="{{ url_for('logout') }}" class="logout">
+                <i class="fas fa-right-from-bracket"></i>
+                <span class="text">Logout</span>
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <section class="content">
+            <nav>
+                <i class="fas fa-bars menu-btn"></i>
+            </nav>
+
+            <main>
+                <div class="head-title">
+                    <div class="left">
+                        <ul class="breadcrumb">
+                            <li>
+                                <a href="#">Products</a>
+                            </li>
+                            <i class="fas fa-chevron-right"></i>
+                            <li>
+                                <a href="{{ url_for('addproduct') }}" class="active">Add Product</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="main-content">
+                    {% form "_render_fields.html" import render_field, render_field_select %}
+                    <div class="d-flex flex-column-fluid">
+                        <!--begin::Container-->
+                        <div class=" container ">
+                            <form class="form" method="POST" enctype="multipart/form-data" style="width: 60%">
+                                <div class="card card-custom" style="background-color: antiquewhite;">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-xl-2"></div>
+                                            <div class="col-xl-8">
+
+                                                {{ form.csrf_token }}
+                                                {% if msg %}
+                                                    <div class="alert alert-custom alert-danger fade show" role="alert">
+                                                     <div class="alert-icon"><i class="flaticon-warning"></i></div>
+                                                        <div class="alert-text">{{ msg }}</div>
+                                                        <div class="alert-close">
+                                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                <span aria-hidden="true"><i class="ki ki-close"></i></span>
+                                                            </button>
+                                                         </div>
+                                                    </div>
+                                                    {% endif %}
+
+                                                    {{ render_field(form.name, class="form-control", mandatory=true) }}
+
+                                                    {{ render_field(form.price, class="form-control", mandatory=true) }}
+
+                                                    {{ render_field(form.description, class="form-control", mandatory=true) }}
+
+                                                    {{ render_field(form.quantity, class="form-control", mandatory=true) }}
+
+                                                    {{ render_field(form.image_1, class="form-control", mandatory=true) }}
+                                                    <div class="card-toolbar">
+      
+                                                        <button id="submit" type="submit" class="btn btn-light-warning font-weight-bolder">
+                                                            <i class=" icon-lg la la-save"></i>
+                                                            Add Product
+                                                        </button>
+                                                        <!--end::Dropdown-->
+                            
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-2"></div>
+                                            </div>
+                                        </div>
+                    
+                    
+                                    </div>
+                                </form>
+                            </div>
+                            <!--end::Container-->
+                        </div>   
+                      </div>
+                    </main>
+                  </section>
+              
+                  <script src="static/js/home.js"></script>
+                </body>
+              </html>
+                
+                </div>
+            </main>
+        </section>
