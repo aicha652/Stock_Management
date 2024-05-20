@@ -193,6 +193,14 @@ def updateproduct(id):
     form.quantity.data = product.quantity
     return render_template('edit_product.html', form=form, product=product, msg=msg)
 
+# Account route accessible to all users
+@app.route('/account')
+@login_required
+def account():
+    user = User.query.get_or_404(current_user.id)
+    form = EditUserForm(obj=user)
+    return render_template('account.html', form=form, user=user) 
+
 # Update account route, allows user to update their account details
 @app.route('/updateaccount/<int:id>', methods=["GET", "POST"])
 @login_required
