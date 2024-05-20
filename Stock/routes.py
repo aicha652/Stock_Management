@@ -136,3 +136,11 @@ def addproduct():
             db.session.commit()
             return redirect(url_for('products'))
         return render_template('add_product.html', form=form, msg=msg)
+    
+
+# View products route, shows all products
+@app.route('/products')
+@login_required
+def products():
+    products = Product.query.all()
+    return render_template('products.html', products=products)
