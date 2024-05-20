@@ -53,6 +53,13 @@ def home():
     products = Product.query.count()
     return render_template('home.html', users=users, products=products)
 
+# Logout route, logs out the user
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+ 
 
 #Add user route, accessibl to admin, add new users to the database
 @app.route('/addUser', methods=["GET", "POST"])
