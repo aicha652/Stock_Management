@@ -38,3 +38,12 @@ class UserForm(FlaskForm):
     def validate_email(self, email):
         if User.query.filter_by(email=email.data).first():
             raise ValidationError("Email already registred!")
+        
+
+class AddProducts(FlaskForm):
+    name = StringField("Name", validators=[DataRequired()])
+    price = StringField("Price", validators=[DataRequired()])
+    description = TextAreaField("Description", validators=[DataRequired()])
+    quantity = IntegerField("Quantity", [validators.NumberRange(min=1, max=10000)])
+    image_1 = FileField("Image", validators=[DataRequired(), FileAllowed(['jpg', 'jpeg', 'png', 'svg', 'gif'])])
+    

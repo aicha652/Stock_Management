@@ -2,7 +2,7 @@ from flask import send_from_directory, render_template, url_for, flash, redirect
 from flask_login import login_user, current_user, logout_user, login_required
 from Stock import app, db, bcrypt, photos
 from Stock.models import User, Product
-from Stock.forms import LoginForm, UserForm
+from Stock.forms import LoginForm, UserForm, AddProducts
 import os, secrets, re
 from functools import wraps
 
@@ -65,7 +65,29 @@ def home():
     return render_template('home.html', users=users, products=products)
 
 
-
+# Add product route , adds new products to the database
+@app.route('/addproduct', methods=["GET", "POST"])
+@login_required
+def addproduct():
+    form = AddProducts()
+    msg = ""
+    if request.method == "POST":
+        name = form.name.data
+        price = form.price.data
+        description = form.description.data
+        quantity = form.quantity.data
+        image_1 = photos.save(request.files['image_1'] , name=secrets.token_hex(10) + '.')
+        print(f"Image 1 name:{image_1}, its type:{type(image_1)}")
+        if not re.match(r"^/d+(/./d+)?$", form.price.data):
+            msg = "invalid Price"
+        else:
+            product = Product(name=name, price=price, description=description, quantity=quantity,
+            image_1=image_1)
+            db.session.add(product)
+            flash(f"{name} has been added to database.", 'success')
+            db.session.commit()
+            return redirect(url_for('products'))
+        return render_template('add_product.html', form=form, msg=msg)
 
 
 
