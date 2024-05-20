@@ -142,7 +142,7 @@ def addproduct():
             flash(f"{name} has been added to database.", 'success')
             db.session.commit()
             return redirect(url_for('products'))
-        return render_template('add_product.html', form=form, msg=msg)
+    return render_template('add_product.html', form=form, msg=msg)
     
 
 # View products route, shows all products
