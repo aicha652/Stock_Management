@@ -162,3 +162,33 @@ def deleteproduct(id):
                 return redirect(url_for('products'))
             flash(f'Cant delete {product.name}', 'warning')
             return redirect(url_for('products'))
+        
+# Update product route to update product details
+@app.route('/updateproduct/<int:id>', methods=["GET", "POST"])
+@login_required
+def updateproduct(id):
+    product = Product.query.get_or_404(id)
+    form = AddProducts(request.form)
+    msg=""
+    if request.method =="POST":
+        product.name = form.name.data
+        product.price = form.price.data
+        product.description = form.description.data
+        product.quantity = form.quantity.data
+        if request.files.get('image_1'):
+            try:
+                os.unlink(os.path.join(current_app.root_path, 'static/images/' + product.image_1))
+                product.image_1 = photos.save(request.files['image_1'], name=secrets.token_hex(10) + '.')
+            except:
+                product.image_1 = photos.save(request.files['image_1'], name=secrets.token_hex(10) + '.')
+        elif not re.match(r"^/d+(/./d+)?$", form.price.data):
+            msg = "invalid Price"
+        else:
+            db.session.commit()
+            flash('Product Updated', 'success')
+            return redirect(url_for('products'))
+    form.name.data = product.name
+    form.price.data = product.price
+    form.description.data = product.description
+    form.quantity.data = product.quantity
+    return render_template('edit_product.html', form=form, product=product, msg=msg)
