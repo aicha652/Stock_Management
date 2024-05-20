@@ -22,17 +22,6 @@ def admin_required(func):
     return decorated_function
 
 
-
-
-
-
-
-
-
-
-
-
-
 #Default route, redirects to the login page
 @app.route('/')
 def route_default():
@@ -41,7 +30,7 @@ def route_default():
 #Login route, handles user login
 @app.route('/login', methods=['GET', "POST"])
 def login():
-    msg=""
+    msg = ""
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     
@@ -63,45 +52,6 @@ def home():
     users = User.query.count()
     products = Product.query.count()
     return render_template('home.html', users=users, products=products)
-
-
-# Add product route , adds new products to the database
-@app.route('/addproduct', methods=["GET", "POST"])
-@login_required
-def addproduct():
-    form = AddProducts()
-    msg = ""
-    if request.method == "POST":
-        name = form.name.data
-        price = form.price.data
-        description = form.description.data
-        quantity = form.quantity.data
-        image_1 = photos.save(request.files['image_1'] , name=secrets.token_hex(10) + '.')
-        print(f"Image 1 name:{image_1}, its type:{type(image_1)}")
-        if not re.match(r"^/d+(/./d+)?$", form.price.data):
-            msg = "invalid Price"
-        else:
-            product = Product(name=name, price=price, description=description, quantity=quantity,
-            image_1=image_1)
-            db.session.add(product)
-            flash(f"{name} has been added to database.", 'success')
-            db.session.commit()
-            return redirect(url_for('products'))
-        return render_template('add_product.html', form=form, msg=msg)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 #Add user route, accessibl to admin, add new users to the database
@@ -137,3 +87,52 @@ def addUser():
             msg = "User has been added"
             return redirect(url_for('users'))
     return render_template('add_user.html', form=form, msg=msg)
+
+
+#View users route, accessible to admin, shows all users
+@app.route('/users')
+@login_required
+@admin_required
+def users():
+    users = User.query.all()
+    return render_template('users.html', users=users)
+
+
+#Delete user route, accessibl to admin, deletes a user from the database
+@app.route('/deleteuser/<int:id>', methods=["POST"])
+@login_required
+@admin_required
+def deleteuser(id):
+    user = User.query.get_or_404(id)
+    if request.method == "POST" and current_user.id != user.id:
+        db.session.delete(user)
+        db.session.commit()
+        flash(f'{user.username} Deleted', 'success')
+        return redirect(url_for('users'))
+    flash(f'Cant delete {user.username}', 'warning')
+    return redirect(url_for('users'))
+
+
+# Add product route , adds new products to the database
+@app.route('/addproduct', methods=["GET", "POST"])
+@login_required
+def addproduct():
+    form = AddProducts()
+    msg = ""
+    if request.method == "POST":
+        name = form.name.data
+        price = form.price.data
+        description = form.description.data
+        quantity = form.quantity.data
+        image_1 = photos.save(request.files['image_1'] , name=secrets.token_hex(10) + '.')
+        print(f"Image 1 name:{image_1}, its type:{type(image_1)}")
+        if not re.match(r"^/d+(/./d+)?$", form.price.data):
+            msg = "invalid Price"
+        else:
+            product = Product(name=name, price=price, description=description, quantity=quantity,
+            image_1=image_1)
+            db.session.add(product)
+            flash(f"{name} has been added to database.", 'success')
+            db.session.commit()
+            return redirect(url_for('products'))
+        return render_template('add_product.html', form=form, msg=msg)
