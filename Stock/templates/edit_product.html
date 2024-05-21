@@ -13,7 +13,7 @@
         />
 
         <!--css file-->
-        <link rel="stylesheet" href="static/css/home.css" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}" />
 
         <style>
             .container {
@@ -33,7 +33,7 @@
             }
             
             .card-toolbar {
-                margin-left: 200px;
+                margin-left: 150px;
                 padding: 10px;
             }
   
@@ -116,7 +116,7 @@
               </a>
             </li>
         {% if current_user.is_admin %}    
-            <li class="active">
+            <li>
               <a href="{{ url_for('addUser') }}" class="nav-link">
                 <i class="fa-solid fa-user-plus"></i>
                 <span class="text">Add User</span>
@@ -168,7 +168,7 @@
                 </div>
 
                 <div class="main-content">
-                    {% form "_render_fields.html" import render_field, render_field_select %}
+                    {% from "_render_fields.html" import render_field, render_field_select %}
                     <div class="d-flex flex-column-fluid">
                         <!--begin::Container-->
                         <div class=" container ">
@@ -228,7 +228,7 @@
                     </main>
                   </section>
               
-                  <script src="static/js/home.js"></script>
+                  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
                 </body>
               </html>
                 

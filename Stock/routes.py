@@ -163,12 +163,12 @@ def deleteproduct(id):
                 os.unlink(os.path.join(current_app.root_path, 'static/images/' + product.image_1))
             except Exception as e:
                 print(e)
-                db.session.delete(product)
-                db.session.commit()
-                flash(f'{product.name} Deleted', 'success')
-                return redirect(url_for('products'))
-            flash(f'Cant delete {product.name}', 'warning')
-            return redirect(url_for('products'))
+        db.session.delete(product)
+        db.session.commit()
+        flash(f'{product.name} Deleted', 'success')
+        return redirect(url_for('products'))
+    flash(f'Cant delete {product.name}', 'warning')
+    return redirect(url_for('products'))
         
 # Update product route to update product details
 @app.route('/updateproduct/<int:id>', methods=["GET", "POST"])
@@ -188,7 +188,7 @@ def updateproduct(id):
                 product.image_1 = photos.save(request.files['image_1'], name=secrets.token_hex(10) + '.')
             except:
                 product.image_1 = photos.save(request.files['image_1'], name=secrets.token_hex(10) + '.')
-        elif not re.match(r"^/d+(/./d+)?$", form.price.data):
+        elif not re.match(r"^\d+(\.\d+)?$", form.price.data):
             msg = "invalid Price"
         else:
             db.session.commit()

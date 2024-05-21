@@ -45,7 +45,7 @@ class AddProducts(FlaskForm):
     price = StringField("Price", validators=[DataRequired()])
     description = TextAreaField("Description", validators=[DataRequired()])
     quantity = IntegerField("Quantity", [validators.NumberRange(min=1, max=10000)])
-    image_1 = FileField("Image", validators=[DataRequired(), FileAllowed(['jpg', 'jpeg', 'png', 'svg', 'gif'])])
+    image_1 = FileField("Image", validators=[validators.DataRequired(), FileAllowed(['jpg', 'jpeg', 'png', 'svg', 'gif'])])
     
 class EditUserForm(FlaskForm):
     username = StringField('Username', [validators.DataRequired()])

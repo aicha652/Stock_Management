@@ -6,6 +6,7 @@ from logging.config import fileConfig
 from flask import current_app
 
 from alembic import context
+
 from Stock.models import User, Product
 
 # this is the Alembic Config object, which provides
