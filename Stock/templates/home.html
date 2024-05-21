@@ -22,17 +22,17 @@
               </a>
 
               <ul class="side-menu top">
-                <li class="active">
-                    <a href="{{ url_for('home') }}" class="nav-link">
-                        <i class="fas fa-border-all"></i>
-                        <span class="text">Dashboard</span>
-                    </a>
+                    <li class="active">
+                        <a href="{{ url_for('home') }}" class="nav-link">
+                            <i class="fas fa-border-all"></i>
+                            <span class="text">Dashboard</span>
+                       </a>
                     </li>
                     <li>
-                        <a href="{{ url_for('addproduct') }}" class="nav-link">
-                            <i class="fas fa_shopping-cart"></i>
-                            <span class="text">Add Product</span>
-                        </a>
+                      <a href="{{ url_for('addproduct') }}" class="nav-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="text">Add Product</span>
+                      </a>
                     </li>
                     <li>
                         <a href="{{ url_for('products') }}" class="nav-link">
@@ -41,7 +41,7 @@
                         </a>
                       </li>
                   {% if current_user.is_admin %}    
-                      <li class="active">
+                      <li>
                         <a href="{{ url_for('addUser') }}" class="nav-link">
                           <i class="fa-solid fa-user-plus"></i>
                           <span class="text">Add User</span>

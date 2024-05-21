@@ -13,7 +13,7 @@
         />
 
         <!--css file-->
-        <link rel="stylesheet" href="static/css/home.css" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}" />
 
         <style>
             /* Custom styles for the entire page */
@@ -225,7 +225,7 @@
                     </main>
                   </section>
               
-                  <script src="static/js/home.js"></script>
+                  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
                 </body>
               </html>
                 

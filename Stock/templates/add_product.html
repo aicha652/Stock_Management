@@ -33,7 +33,7 @@
             }
             
             .card-toolbar {
-                margin-left: 200px;
+                margin-left: 160px;
                 padding: 10px;
             }
   
@@ -103,7 +103,7 @@
                 <span class="text">Dashboard</span>
               </a>
             </li>
-            <li>
+            <li class="active">
               <a href="{{ url_for('addproduct') }}" class="nav-link">
                 <i class="fas fa-shopping-cart"></i>
                 <span class="text">Add Product</span>
@@ -116,7 +116,7 @@
               </a>
             </li>
         {% if current_user.is_admin %}    
-            <li class="active">
+            <li>
               <a href="{{ url_for('addUser') }}" class="nav-link">
                 <i class="fa-solid fa-user-plus"></i>
                 <span class="text">Add User</span>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -59,12 +59,13 @@
     <body style="background-image: url('static/images/stock.png'); background-size: cover;">
         {% from "_render_fields.html" import render_field %}
         <div class="signin">
+                
             <div class="form-section">
                 <form method="POST" enctype="multipart/form-data">
                     {% if msg %}
-                       <div class="message-box">
+                        <div class="message-box">
                             {{ msg }}
-                       </div>
+                        </div>
                     {% endif %}
                     <span class="login100-form-title">
                         Login
@@ -76,23 +77,24 @@
                     <div>
                         <div class="row justify-content-center">
                             <div class="col-md-10">
-                                {{ render_field(form.email, class="form-control") }}
+                        {{ render_field(form.email, class="form-control") }}
                             </div>
+                    </div>
+                    <div class="row justify-content-center mt-4">
+                        <div class="col-md-10">
+                        {{ render_field(form.password, class="form-control") }}
                         </div>
-                        <div class="row justify-content-center mt-4">
-                            <div class="col-md-10">
-                                {{ render_field(form.password, class="form-control") }}
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row justify-content-center mt-4">
-                            <div class="col-md-14">
-                                <input typ="submit" value="Login" class="btn btn-success center" style="width:300px; margin-left: 40px; background-color: #0056b3">
-                            </div>
+                    </div>
+                    </div>
+                    <br>
+                    <div class="row justify-content-center mt-4">
+                        <div class="col-md-14">
+                    <p><input type="submit" value="Login" class="btn btn-success center" style="width:300px; margin-left: 40px; background-color: #0056b3">
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-    </body>
-</html>
+            
+        </body>
+        </html>
