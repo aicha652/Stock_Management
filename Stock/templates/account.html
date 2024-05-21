@@ -136,7 +136,7 @@
               </a>
             </li>
         {% if current_user.is_admin %}    
-            <li class="active">
+            <li>
               <a href="{{ url_for('addUser') }}" class="nav-link">
                 <i class="fa-solid fa-user-plus"></i>
                 <span class="text">Add User</span>
@@ -152,7 +152,7 @@
           </ul>
     
           <ul class="side-menu">
-            <li>
+            <li class="active">
               <a href="{{ url_for('account') }}">
                 <i class="fa-regular fa-address-card"></i>
                 <span class="text">Profile</span>

@@ -176,28 +176,45 @@ def deleteproduct(id):
 def updateproduct(id):
     product = Product.query.get_or_404(id)
     form = AddProducts(request.form)
-    msg=""
-    if request.method =="POST":
-        product.name = form.name.data
-        product.price = form.price.data
-        product.description = form.description.data
-        product.quantity = form.quantity.data
-        if request.files.get('image_1'):
+    msg = ""
+    if request.method == "POST":
+        form = AddProducts(request.form, obj=product)  # Bind the form to the product instance
+        if form.validate_on_submit():
+            product.name = form.name.data
+            product.price = form.price.data
+            product.description = form.description.data
+            product.quantity = form.quantity.data
+            
+            # Handle image upload
+            if 'image_1' in request.files:
+                image_file = request.files['image_1']
+                if image_file:
+                    try:
+                        # Delete old image if exists
+                        if product.image_1:
+                            old_image_path = os.path.join(current_app.root_path, 'static/images', product.image_1)
+                            if os.path.exists(old_image_path):
+                                os.unlink(old_image_path)
+                        
+                        # Save new image
+                        image_filename = photos.save(image_file, name=secrets.token_hex(10) + '.')
+                        product.image_1 = image_filename
+                    except Exception as e:
+                        flash(f"Error saving image: {str(e)}", 'danger')
+                        return render_template('edit_product.html', form=form, product=product, msg=msg)
             try:
-                os.unlink(os.path.join(current_app.root_path, 'static/images/' + product.image_1))
-                product.image_1 = photos.save(request.files['image_1'], name=secrets.token_hex(10) + '.')
-            except:
-                product.image_1 = photos.save(request.files['image_1'], name=secrets.token_hex(10) + '.')
-        elif not re.match(r"^\d+(\.\d+)?$", form.price.data):
-            msg = "invalid Price"
-        else:
-            db.session.commit()
-            flash('Product Updated', 'success')
-            return redirect(url_for('products'))
+                db.session.commit()
+                flash('Product Updated', 'success')
+                return redirect(url_for('products'))
+            except Exception as e:
+                db.session.rollback()
+                flash(f"Error updating product: {str(e)}", 'danger')
+    
     form.name.data = product.name
     form.price.data = product.price
     form.description.data = product.description
     form.quantity.data = product.quantity
+    
     return render_template('edit_product.html', form=form, product=product, msg=msg)
 
 # Account route accessible to all users
