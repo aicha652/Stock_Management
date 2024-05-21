@@ -58,3 +58,91 @@
         </div>  
     </div>
 {% endmacro %}
+
+{% macro render_field_icon(field, _class='', info='', icon='', mandatory=false) %}
+    <div class="form-group {% if field.errors %} validated{% endif %}">
+        <label class="font-size-h6" for="{{  field.name }}">{{ field.label.text }}{% if mandatory %}
+            <span class="text-danger">*</span>{% endif %}
+        </label>
+        <div class="input-group input-group-solid input-group-lg">
+            {% if field.errors %}
+                 {{ field(class_='form-control form-control-solid form-control-lg is-invalid' + _class ,
+                 autocomplete="off", **kwargs|safe) }}
+            {% else %}
+                 {{ field(class_='form-control form-control-solid form-control-lg ' + _class ,
+                 autocomplete="off", **kwargs|safe) }}    
+            {% endif %}
+            <div class="input-group-append">
+                <span class="input-group-text">
+                    <i class="{{ icon }}"></i>
+                </span>
+            </div>
+        </div>
+        {% for error in field.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+        <span class="form-text text-muted">{{ info }}</span>
+    </div>
+{% endmacro %}
+
+{% macro render_field_radio(field, info='', mandatory=false, color='primary') %}
+    <div class="form-group {% if field.errors %} validate{% endif %}">
+        <label class="font-size-h6">{{ field.label.text }}{% if mandatory %}
+            <span class="text-danger">*</span>{% endif %}
+        </label>
+        <div class="radio-inline">
+            {% for subfield in field %}
+                <label class="radio radio-{{ color }} radio-lg pr-10 pt-2 font-weight-bold">
+                    {{ subfield }}
+                    <span></span>
+                    {{ subfield.label.text }}
+                </label>
+            {% endfor %}
+        </div>
+        {% for error in field.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% macro render_field_date(field, _class='', info='', mandatory=false) %}
+    <div class="form-group {% if field.errors %} validated{% endif %}">
+        <label class="font-size-h6">{{ field.label.text }}{% if mandatory %}
+            <span class="text-danger">*</span>{% endif %}</label>
+        <div class="input-group input-group-solid input-group-lg date">
+            <input type="text"
+                   class="{{ field.name }} form-control form-control-solid form-control-lg {% if field.errors %} is-invalid{% endif %}"
+                   readonly="readonly"
+                   placeholder="Choose Date" autocomplete="off">
+            <div class="input-group-append">
+                <span class="input-group-text">
+                    <i class="la la-calendar"></i>
+                </span>
+            </div>
+        </div>
+        {% for error in field.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+        <span class="form-text text-muted">{{ info }}</span>
+    </div>
+    {{ field(hidden=true) }}
+{% endmacro %}
+
+{% macro render_field_date_html(field, _class='', info='', mandatory=false) %}
+    <div class="form-group {% if field.errors %} validate{% endif %}">
+        <label class="font-size-h6" for="{{ field.name }}">
+            {{ field.label.text }} {% if mandatory %}
+            <span class="text-danger">*</span>{% endif %}</label>
+        {% if field.errors %}
+            {{ field(class_='form-control form-control-solid form-control-lg is-invalid' + _class ,
+            autocomplete="off", **kwargs)|safe }}
+        {% else %}
+            {{ field(class_='form-control form-control-solid form-control-lg ' + _class ,
+            autocomplete="off", **kwargs)|safe }}
+        {% endif %}
+        {% for error in field.errors %}
+            <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+        <span class="form-text text-muted">{{ info }}</span>
+    </div>
+{% endmacro %}
