@@ -133,7 +133,7 @@ def addproduct():
         quantity = form.quantity.data
         image_1 = photos.save(request.files['image_1'] , name=secrets.token_hex(10) + '.')
         print(f"Image 1 name:{image_1}, its type:{type(image_1)}")
-        if not re.match(r"^/d+(/./d+)?$", form.price.data):
+        if not re.match(r"^\d+(\.\d+)?$", form.price.data):
             msg = "invalid Price"
         else:
             product = Product(name=name, price=price, description=description, quantity=quantity,
