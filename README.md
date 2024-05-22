@@ -1,6 +1,6 @@
 # Stock Management
 A stock management application is a software tool designed to help businesses efficiently manage their inventory or stock of goods
-![IMAGE](Stock/static/images/login.PNG)
+
 # Requirement
 Python 3.6.9, virtualenv, mysql
 
