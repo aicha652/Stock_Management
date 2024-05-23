@@ -1,3 +1,4 @@
+import math
 from flask import send_from_directory, render_template, url_for, flash, redirect, request, jsonify, abort, current_app, session
 from flask_login import login_user, current_user, logout_user, login_required
 from Stock import app, db, bcrypt, photos
@@ -149,8 +150,13 @@ def addproduct():
 @app.route('/products')
 @login_required
 def products():
-    products = Product.query.all()
-    return render_template('products.html', products=products)
+    per_page = request.args.get('per_page', 2)
+    page = int(request.args.get('page', 1))
+    offset = (int(page) - 1) * int(per_page)
+    products = Product.query.order_by(Product.id.asc()).limit(per_page).offset(offset)
+    total_products = Product.query.count()
+    total_pages = math.ceil(total_products/ int(per_page))
+    return render_template('products.html', products=products, per_page=per_page, page=page, total_pages=total_pages)
 
 # Delete product route, delete a product from database
 @app.route('/deleteproduct/<int:id>', methods=["POST"])
