@@ -50,4 +50,6 @@ class AddProducts(FlaskForm):
 class EditUserForm(FlaskForm):
     username = StringField('Username', [validators.DataRequired()])
     email = StringField("Email", validators=[DataRequired(), Email()])
-    phone = StringField('Phone', [validators.DataRequired()])
+    phone = StringField('Phone', validators=[DataRequired(),
+                                             validators.Length(min=10,
+                                                               message='Phone should be 10 characters')])

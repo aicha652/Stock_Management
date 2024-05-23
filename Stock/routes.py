@@ -70,11 +70,11 @@ def addUser():
     msg = ""
     form = UserForm()
     if request.method == "POST":
-        username = form.username.data
-        email = form.email.data
+        username = form.username.data.strip()
+        email = form.email.data.strip()
         password = bcrypt.generate_password_hash(form.password.data)
         confirm = bcrypt.generate_password_hash(form.confirm.data)
-        phone = form.phone.data
+        phone = form.phone.data.strip()
         #check if the username and email already exists
         existing_user = User.query.filter_by(username=username).first()
         existing_email = User.query.filter_by(email=email).first()
@@ -239,11 +239,24 @@ def updateaccount(id):
     user = User.query.get_or_404(id)
     form = EditUserForm(request.form)
     if request.method == "POST":
-        user.username = form.username.data
-        user.email = form.email.data
-        user.phone = form.phone.data
-        db.session.commit()
-        msg = "Profile Updated"
+        name = user.username
+        email = user.email
+        #check if the username and email already exists
+        existing_user = User.query.filter_by(username=form.username.data.strip()).first()
+        existing_email = User.query.filter_by(email=form.email.data.strip()).first()
+
+        if name != form.username.data.strip() and existing_user:
+            msg = "Username already exists. Please choose a different username."
+        elif email != form.email.data.strip() and existing_email :
+            msg = "email already exists. Please choose a different email."
+        elif not re.match(r"[^@]+@[^@]+\.[^@]+", form.email.data):
+            msg = "Invalid email address"
+        else:
+            user.username = form.username.data.strip()
+            user.email = form.email.data.strip()
+            user.phone = form.phone.data.strip()
+            db.session.commit()
+            msg = "Profile Updated"
     form.username.data = user.username
     form.email.data = user.email
     form.phone.data = user.phone
