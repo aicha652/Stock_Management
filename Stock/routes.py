@@ -257,6 +257,8 @@ def updateaccount(id):
             msg = "email already exists. Please choose a different email."
         elif not re.match(r"[^@]+@[^@]+\.[^@]+", form.email.data):
             msg = "Invalid email address"
+        elif not re.match(r'^\d+$', form.phone.data):
+            msg = "Invalid Phone Number"
         else:
             user.username = form.username.data.strip()
             user.email = form.email.data.strip()
