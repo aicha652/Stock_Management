@@ -221,7 +221,7 @@
     <script src="static/js/home.js"></script>
     <script>
       function isValidPhoneNumber(phoneNumber) {
-          // Define a pattern for valid phone numbers (adjust as needed)
+          // Define a pattern for valid phone numbers
           const pattern = /^\d{10}$/; // Assumes a 10-digit format
 
           // Check if the phone number matches the pattern
@@ -230,10 +230,10 @@
 
       // Bind the validation function to the form submission
       document.getElementById('userForm').addEventListener('submit', function(event) {
-          const phoneInput = document.getElementById('phoneInput').value; // Adjust the ID to match your form field
+          const phoneInput = document.getElementById('phoneInput').value;
 
           if (!isValidPhoneNumber(phoneInput)) {
-              event.preventDefault(); // Prevent form submission
+              event.preventDefault();
               alert("Invalid phone number");
           }
       });
