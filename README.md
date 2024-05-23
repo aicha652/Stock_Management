@@ -9,7 +9,7 @@ Create Mysql DataBase
 ```
 $ cat setup_mysql.sql | sudo mysql -hlocalhost -uroot -p
 ```
-Before procedding the the installation you should install virtualenv and create a new dev environement. After that switch to your new environement and install all the project requirements
+Before procedding to the installation you should install virtualenv and create a new dev environement. After that switch to your new environement and install all the project requirements
 ```
 $ pip install -r requirements.txt
 ```

@@ -102,8 +102,14 @@ def addUser():
 @login_required
 @admin_required
 def users():
-    users = User.query.all()
-    return render_template('users.html', users=users)
+    per_page = request.args.get('per_page', 4)
+    page = int(request.args.get('page', 1))
+    offset = (int(page) - 1) * int(per_page)
+    users = User.query.order_by(User.id.asc()).limit(per_page).offset(offset)
+    total_users = User.query.count()
+    total_pages = math.ceil(total_users/ int(per_page))
+    return render_template('users.html', users=users, per_page=per_page, page=page, total_pages=total_pages)
+       
 
 
 #Delete user route, accessibl to admin, deletes a user from the database
